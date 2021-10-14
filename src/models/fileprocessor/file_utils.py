@@ -2,6 +2,7 @@ import os
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
+EXTRA_KERAS_FILE = "keras_metadata.pb"
 
 
 def list_all_files(path: str) -> list:
@@ -24,7 +25,7 @@ def is_tensorflow(path: str) -> bool:
     local_files = list_all_files(path)
     for key in must_have_files.keys():
         for file in local_files:
-            if (str(key) in str(file)):
+            if (str(key) in str(file) and not(EXTRA_KERAS_FILE in str(file))):
                 must_have_files[key] = True
                 break
     local_folders = list_all_folders(path)
@@ -36,3 +37,24 @@ def is_tensorflow(path: str) -> bool:
     logging.debug("Files:" + str(must_have_files) +
                   " dirs: " + str(must_have_folders))
     return (all(value == True for value in must_have_files.values())) and (all(value == True for value in must_have_folders.values()))
+
+
+def is_HDF5_tensorflow(path: str) -> bool:
+    HDF5str = ".hdf5"
+    H5str = ".h5"
+    if (path.lower().endswith(HDF5str) or path.lower().endswith(H5str)):
+        return True
+    return False
+
+
+def is_keras(path: str) -> bool:
+    # current version of tensorflow speficies this extra file for keras models
+    if(not is_tensorflow(path)):
+        """Latest versions of tf.keras savedModel is as tensorflow. It just adds a keras_metadata file"""
+        return False
+    print(EXTRA_KERAS_FILE in list_all_files(path))
+    for file in list_all_files(path):
+        print (file, EXTRA_KERAS_FILE)
+        if (EXTRA_KERAS_FILE in file):
+            return True
+    return False

@@ -5,14 +5,15 @@ Last updated:
 """
 
 from model_base import Model, ModelType
-from models.model_tensorflow import TensorflowModel
+from src.models.model_keras import KerasModel
+from src.models.model_tensorflow import TensorflowModel
 from fileprocessor import file_utils
 
 """Available implementations"""
 Factories = {
     ModelType.TENSORFLOW: TensorflowModel,
-    ModelType.PYTORCH:    None,
-    ModelType.KERAS:      None
+    ModelType.KERAS:      KerasModel,
+    ModelType.PYTORCH:    None
 }
 
 
@@ -51,14 +52,14 @@ class ModelFactory:
         return False
 
     def is_keras(self):
-        return False
+        return file_utils.is_keras(self.path)
 
     def identify_model_type(self) -> ModelType:
-        if self.is_tensorflow():
-            return ModelType.TENSORFLOW
-        elif self.is_keras():
+        if self.is_keras():
             return ModelType.KERAS
-        elif self.is_pytorch:
+        elif self.is_tensorflow():
+            return ModelType.TENSORFLOW
+        elif self.is_pytorch():
             return ModelType.PYTORCH
         else:
             return ModelType.UNKNOWN

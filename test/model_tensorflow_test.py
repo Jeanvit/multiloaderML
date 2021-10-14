@@ -14,7 +14,7 @@ def dummy_model(save_path: str = "") -> tf.keras.Model:
     model = tf.keras.Model(inputs, outputs)
     model.compile(optimizer="adam", loss="mean_squared_error")
     if (save_path != ""):
-        model.save(save_path)
+        tf.keras.models.save_model(model,save_path)
     else:
         return model
 

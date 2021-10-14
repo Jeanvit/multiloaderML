@@ -58,13 +58,13 @@ class TensorflowModel(Model):
             self.is_loaded = True
             return True
         try:
-            self.model_instance = tf.keras.models.load_model(self.model_path)
+            self.model_instance = tf.saved_model.load(self.model_path)
             self.is_loaded = True
         except Exception as e:
             logging.error("Error loading model: " + str(e))
             self.model_instance = None
             self.is_loaded = False
-            return False
+            raise(e)
         return True
 
     def is_valid(self) -> bool:
