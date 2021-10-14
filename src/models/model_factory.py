@@ -5,14 +5,12 @@ Last updated:
 """
 
 from model_base import Model, ModelType
-from src.models.model_keras import KerasModel
 from src.models.model_tfkeras import TFKerasModel
 from fileprocessor import file_utils
 
 """Available implementations"""
 Factories = {
     ModelType.TFKERAS:    TFKerasModel,
-    ModelType.KERAS:      KerasModel,
     ModelType.PYTORCH:    None
 }
 
@@ -28,7 +26,7 @@ class ModelFactory:
     path: str
     name: str
 
-    def __init__(self, model_path: str, model_name: str) -> None:
+    def __init__(self, model_path: str, model_name: str ) -> None:
         self.path = model_path
         self.name = model_name
         self.model_type = self.identify_model_type()
@@ -52,15 +50,16 @@ class ModelFactory:
         return False
 
     def is_keras(self):
+        """
+        Almost the same as tfkeras, the difference is that there is an extra keras_metadata.pb
+        """
         return file_utils.is_keras(self.path)
 
     def is_HDF5(self):
         return file_utils.is_HDF5(self.path)
 
     def identify_model_type(self) -> ModelType:
-        if self.is_keras():
-            return ModelType.KERAS
-        elif self.is_tfkeras() or self.is_HDF5():
+        if self.is_tfkeras() or self.is_HDF5() or self.is_keras():
             return ModelType.TFKERAS
         elif self.is_pytorch():
             return ModelType.PYTORCH
