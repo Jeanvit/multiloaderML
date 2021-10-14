@@ -17,6 +17,7 @@ class ModelType(Enum):
     PYTORCH    = auto()
     SKLEARN    = auto()
     TENSORFLOW = auto()
+    TFKERAS    = auto()
     CNTK       = auto()
     CAFFE      = auto()
     UNKNOWN    = auto()

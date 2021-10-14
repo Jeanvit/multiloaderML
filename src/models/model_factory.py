@@ -6,12 +6,12 @@ Last updated:
 
 from model_base import Model, ModelType
 from src.models.model_keras import KerasModel
-from src.models.model_tensorflow import TensorflowModel
+from src.models.model_tfkeras import TFKerasModel
 from fileprocessor import file_utils
 
 """Available implementations"""
 Factories = {
-    ModelType.TENSORFLOW: TensorflowModel,
+    ModelType.TFKERAS:    TFKerasModel,
     ModelType.KERAS:      KerasModel,
     ModelType.PYTORCH:    None
 }
@@ -41,12 +41,12 @@ class ModelFactory:
             raise ValueError(
                 "Invalid factory type choose one of these: " + str(Factories))
 
-    def is_tensorflow(self):
+    def is_tfkeras(self):
         """
-        check if the folder is a tensorflow related one it must be a savedModel from tensorflow2.0+
+        check if the folder is a tf.keras related one it must be a savedModel from tensorflow2.0+
         It's based on file checking, it must have the files: .pb .index .data and the /variables dir 
         """
-        return file_utils.is_tensorflow(self.path)
+        return file_utils.is_tfkeras(self.path)
 
     def is_pytorch(self):
         return False
@@ -57,9 +57,13 @@ class ModelFactory:
     def identify_model_type(self) -> ModelType:
         if self.is_keras():
             return ModelType.KERAS
-        elif self.is_tensorflow():
-            return ModelType.TENSORFLOW
+        elif self.is_tfkeras():
+            return ModelType.TFKERAS
         elif self.is_pytorch():
             return ModelType.PYTORCH
         else:
             return ModelType.UNKNOWN
+
+m = ModelFactory("/home/jean/Desktop/peidaotfkeras","").get()
+
+print(m)

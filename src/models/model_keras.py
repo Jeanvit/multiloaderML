@@ -9,7 +9,7 @@ import tensorflow as tf
 from models.model_base import Model, ModelType
 
 
-class TensorflowModel(Model):
+class KerasModel(Model):
     """This is the class for handling tensorflow models behaviour and properties"""
     model_path: str
     model_name: str
@@ -58,13 +58,13 @@ class TensorflowModel(Model):
             self.is_loaded = True
             return True
         try:
-            self.model_instance = tf.saved_model.load(self.model_path)
+            self.model_instance = tf.keras.models.load_model(self.model_path)
             self.is_loaded = True
         except Exception as e:
             logging.error("Error loading model: " + str(e))
             self.model_instance = None
             self.is_loaded = False
-            raise(e)
+            return False
         return True
 
     def is_valid(self) -> bool:
@@ -123,7 +123,7 @@ class TensorflowModel(Model):
 
     def get_type(self) -> ModelType:
         """get the model type"""
-        return ModelType.TENSORFLOW
+        return ModelType.KERAS
 
     def reload(self) -> bool:
         """reload the model and return if the process was sucessful"""
@@ -136,7 +136,7 @@ class TensorflowModel(Model):
     def get_optimizer(self) -> str:
         return self.model_instance.optimizer
 
-    """Custom TENSORFLOW methods"""
+    """Custom TENSORFLOW/KERAS methods"""
 
     def get_metric_names(self) -> any:
         return self.model_instance.metrics_names

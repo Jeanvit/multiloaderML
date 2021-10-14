@@ -15,9 +15,9 @@ def list_all_folders(path: str) -> list:
     return [os.path.join(r, directory) for r, d, f in os.walk(path) for directory in d]
 
 
-def is_tensorflow(path: str) -> bool:
+def is_tfkeras(path: str) -> bool:
     """
-    check if the folder is a tensorflow related one it must be a savedModel from tensorflow2.0+
+    check if the folder is a tf.keras related one it must be a savedModel from tensorflow2.0+
     It's based on file checking, it must have the files: .pb .index .data and the /variables dir 
     """
     must_have_files = {".pb": False, ".index": False, "data": False}
@@ -49,8 +49,8 @@ def is_HDF5_tensorflow(path: str) -> bool:
 
 def is_keras(path: str) -> bool:
     # current version of tensorflow speficies this extra file for keras models
-    if(not is_tensorflow(path)):
-        """Latest versions of tf.keras savedModel is as tensorflow. It just adds a keras_metadata file"""
+    if(not is_tfkeras(path)):
+        """Latest versions of tf.keras savedMode just adds a keras_metadata file"""
         return False
     print(EXTRA_KERAS_FILE in list_all_files(path))
     for file in list_all_files(path):
