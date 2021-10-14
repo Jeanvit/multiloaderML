@@ -148,3 +148,8 @@ class Model(ABC):
     def get_type(self) -> ModelType:
         """get the model type"""
         pass
+
+    @abstractmethod
+    def get_model_size(self) -> float:
+        """get the model size in MB"""
+        pass

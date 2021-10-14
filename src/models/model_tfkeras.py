@@ -7,7 +7,8 @@ Last updated:
 import logging
 import tensorflow as tf
 from models.model_base import Model, ModelType
-
+from pathlib import Path
+import os
 
 class TFKerasModel(Model):
     """This is the class for handling tf.keras models behaviour and properties"""
@@ -21,7 +22,7 @@ class TFKerasModel(Model):
         self.model_name = name
         self.is_loaded = False
         if load_on_start:
-           self.load()
+            self.load()
 
     """start of getters and setters"""
 
@@ -50,7 +51,7 @@ class TFKerasModel(Model):
         self.is_loaded = is_loaded
     """end of getters and setters"""
 
-    def load(self,forced_new_istance = None) -> bool:
+    def load(self, forced_new_istance=None) -> bool:
         """load a model using only its path and return if it was successful"""
         if (forced_new_istance is not None):
             logging.warning("Forcing a new model instance")
@@ -77,7 +78,26 @@ class TFKerasModel(Model):
 
     def get_complexity_level(self) -> float:
         """complexity level measure how much computing power the model will need"""
-        raise NotImplementedError
+        value: float
+        try:
+            value = self.get_number_of_layers() * self.get_number_of_params()
+            value = (value/1000000) / self.get_model_size()
+            return round(value,3)
+        except Exception as e:
+            logging.error("Cant measure model size " + str(e))
+            return 0
+
+    def get_model_size(self) -> float:
+        size: float = 0
+        model = Path(self.model_path)
+        if (not model.is_dir()):
+            size = os.path.getsize(model)
+        else:
+            for path, dirs, files in os.walk(self.model_path):
+                for f in files:
+                    fp = os.path.join(path, f)
+                    size += os.path.getsize(fp)
+        return size / (1024*1024.0)
 
     def get_number_of_params(self) -> int:
         """get the total number of parameters of a given model"""

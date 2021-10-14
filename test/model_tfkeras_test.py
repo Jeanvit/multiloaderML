@@ -46,7 +46,7 @@ def test_model_simple_properties():
     assert tf_keras_model.get_output_dimensionality() == 1
     assert tf_keras_model.get_output_names() == ['dense_2']
     assert tf_keras_model.get_input_names() == ['input_3']
-
+    assert tf_keras_model.get_complexity_level() == 0
 
 def test_model_instances_types():
     tf_keras_model = TFKerasModel("", "", False)
