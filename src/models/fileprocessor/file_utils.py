@@ -39,7 +39,7 @@ def is_tfkeras(path: str) -> bool:
     return (all(value == True for value in must_have_files.values())) and (all(value == True for value in must_have_folders.values()))
 
 
-def is_HDF5_tensorflow(path: str) -> bool:
+def is_HDF5(path: str) -> bool:
     HDF5str = ".hdf5"
     H5str = ".h5"
     if (path.lower().endswith(HDF5str) or path.lower().endswith(H5str)):

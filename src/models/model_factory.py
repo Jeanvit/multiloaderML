@@ -54,16 +54,15 @@ class ModelFactory:
     def is_keras(self):
         return file_utils.is_keras(self.path)
 
+    def is_HDF5(self):
+        return file_utils.is_HDF5(self.path)
+
     def identify_model_type(self) -> ModelType:
         if self.is_keras():
             return ModelType.KERAS
-        elif self.is_tfkeras():
+        elif self.is_tfkeras() or self.is_HDF5():
             return ModelType.TFKERAS
         elif self.is_pytorch():
             return ModelType.PYTORCH
         else:
             return ModelType.UNKNOWN
-
-m = ModelFactory("/home/jean/Desktop/peidaotfkeras","").get()
-
-print(m)
