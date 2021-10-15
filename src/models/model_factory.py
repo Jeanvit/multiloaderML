@@ -4,14 +4,16 @@ Date  : 13/10/21
 Last updated: 
 """
 
-from model_base import Model, ModelType
+from src.models.model_base import Model, ModelType
+from src.models.fileprocessor import file_utils
 from src.models.model_tfkeras import TFKerasModel
-from fileprocessor import file_utils
+from src.models.model_unknown import UnknownModel
 
 """Available implementations"""
 Factories = {
     ModelType.TFKERAS:    TFKerasModel,
-    ModelType.PYTORCH:    None
+    ModelType.PYTORCH:    None,
+    ModelType.UNKNOWN:    UnknownModel
 }
 
 
@@ -33,7 +35,7 @@ class ModelFactory:
 
     def get(self) -> Model:
         """get the the model you are you loaded"""
-        if (self.model_type in Factories and self.model_type != ModelType.UNKNOWN):
+        if (self.model_type in Factories):
             return Factories[self.model_type](self.path, self.name)
         else:
             raise ValueError(
@@ -59,9 +61,12 @@ class ModelFactory:
         return file_utils.is_HDF5(self.path)
 
     def identify_model_type(self) -> ModelType:
-        if self.is_tfkeras() or self.is_HDF5() or self.is_keras():
-            return ModelType.TFKERAS
-        elif self.is_pytorch():
-            return ModelType.PYTORCH
-        else:
+        try:
+            if self.is_tfkeras() or self.is_HDF5() or self.is_keras():
+                return ModelType.TFKERAS
+            elif self.is_pytorch():
+                return ModelType.PYTORCH
+            else:
+                return ModelType.UNKNOWN
+        except Exception as e:
             return ModelType.UNKNOWN

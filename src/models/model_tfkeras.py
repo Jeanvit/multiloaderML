@@ -1,7 +1,7 @@
 """
 Author: Jean Vitor de Paulo
 Date  : 12/10/21
-Last updated: 
+Last updated: 15/10/21
 """
 
 import logging
@@ -147,7 +147,7 @@ class TFKerasModel(Model):
 
     def reload(self) -> bool:
         """reload the model and return if the process was sucessful"""
-        self.load()
+        return self.load()
 
     def preprocess_files_on_path(self) -> None:
         """do file manipulations to make the model loadable"""

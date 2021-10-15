@@ -1,11 +1,13 @@
 """
 Author: Jean Vitor de Paulo
 Date  : 13/10/21
-Last updated: 
+Last updated: 15/10/21
 """
 
-from src.models.model_tfkeras import TFKerasModel
 import tensorflow as tf
+from src.models.model_base import ModelType
+from src.models.model_factory import ModelFactory
+from src.models.model_tfkeras import TFKerasModel
 
 
 def dummy_model(save_path: str = "") -> tf.keras.Model:
@@ -54,3 +56,8 @@ def test_model_instances_types():
     assert isinstance(tf_keras_model.get_single_layer_by_index(1),
                       tf.keras.layers.Dense)
     assert isinstance(tf_keras_model.get_optimizer(), tf.keras.optimizers.Adam)
+
+def test_model_unknwon():
+    tf_keras_model = ModelFactory("","").get()
+    print(ModelType.UNKNOWN == ModelType.UNKNOWN)
+    assert tf_keras_model.get_type().name == ModelType.UNKNOWN.name

@@ -4,7 +4,7 @@ Date  : 12/10/21
 Last updated: 
 """
 
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 from enum import Enum, auto
 
 """Supported libraries by now"""
