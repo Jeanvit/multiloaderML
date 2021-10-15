@@ -143,7 +143,7 @@ class TFKerasModel(Model):
 
     def get_type(self) -> ModelType:
         """get the model type"""
-        return ModelType.TENSORFLOW
+        return ModelType.TFKERAS
 
     def reload(self) -> bool:
         """reload the model and return if the process was sucessful"""
