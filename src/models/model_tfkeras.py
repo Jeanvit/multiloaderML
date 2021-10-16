@@ -70,8 +70,7 @@ class TFKerasModel(Model):
 
     def is_valid(self) -> bool:
         """check if the model has a valid structure"""
-        if not self.is_loaded:
-            return False
+        return self.is_loaded
 
     def get_number_of_layers(self) -> int:
         return len(self.model_instance.layers)
